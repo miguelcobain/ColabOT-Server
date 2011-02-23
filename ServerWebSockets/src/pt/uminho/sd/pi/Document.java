@@ -7,7 +7,7 @@ public class Document {
 	int id;
 	String text;
 	ArrayList<WebSocket> owners;
-
+	int myState, othersState;
 
 
 
@@ -16,6 +16,8 @@ public class Document {
 		this.id = id;
 		this.text = text;
 		this.owners = owners;
+		this.myState = 0;
+		this.othersState = 0;
 	}
 
 
@@ -23,6 +25,8 @@ public class Document {
 		this.id = 0;
 		this.text = "";
 		this.owners = new ArrayList<WebSocket>();
+		this.myState = 0;
+		this.othersState = 0;
 	}
 
 
@@ -47,30 +51,48 @@ public class Document {
 		this.owners = owners;
 	}
 
+
+	public int getMyState() {
+		return myState;
+	}
+
+
+	public void setMyState(int myState) {
+		this.myState = myState;
+	}
+
+
+	public int getOthersState() {
+		return othersState;
+	}
+
+
+	public void setOthersState(int othersState) {
+		this.othersState = othersState;
+	}
+
+
 	public void add(int index, String string ){
-		if(index>text.length()){
-			
-			
-		}else{	
-		
-		String head = text.substring(0, index);
-		String tail = text.substring(index+1);
+		String head = text.substring(0, index-1);
+		String tail = text.substring(index-1);
 		text = head+string+tail;
-		}
+		myState++;
 		System.out.println("*********new text*********\n"+text);
 	}
 
 	public void remove(int index, int length){
-		String head = text.substring(0, index);
-		String tail = text.substring(index+1+length);
+		String head = text.substring(0, index-1);
+		String tail = text.substring(index-1+length);
 		text = head+tail;
+		myState++;
 		System.out.println("*********new text*********\n"+text);
 
 	}
 
 	public void replace(int index, int length, String string){
-		remove(index,length);
-		add(index,string);		
+		remove(index-1,length-1);
+		add(index-1,string);	
+		myState++;
 		System.out.println("*********new text*********\n"+text);
 	}
 
